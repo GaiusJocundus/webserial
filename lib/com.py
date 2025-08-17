@@ -10,9 +10,13 @@ class Com():
         self.sout = io.TextIOWrapper(io.BufferedWriter(self.con),encoding="ascii")
         self.sin = io.TextIOWrapper(io.BufferedReader(self.con),encoding="ascii")
         
-    def write(self, text):
+    def write(self, text, newline = True):
         for ltr in f'{text}':
             self.sout.write(f'{ltr}')
+            self.sout.flush()
+            sleep(0.01)
+        if newline:
+            self.sout.write('\r')
             self.sout.flush()
             sleep(0.01)
 
@@ -24,4 +28,3 @@ class Com():
             print(line, end='')
         print('')
         self.sin.flush()
-
