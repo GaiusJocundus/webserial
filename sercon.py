@@ -15,6 +15,9 @@ async def serIo(websocket):
         con0.write(message, False)
         sout = con0.read()
         for line in sout:
+            for ltr in line:
+                if ((ltr == '\n') or (ltr == '>') or (ltr == '*')):
+                    await websocket.send('\r')
             await websocket.send(line)
 
 
