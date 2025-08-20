@@ -1,8 +1,9 @@
 <!doctype html>
   <html>
     <head>
-      <link rel="stylesheet" href="node_modules/@xterm/xterm/css/xterm.css" />
-      <script src="node_modules/@xterm/xterm/lib/xterm.js"></script>
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/xterm.css' %}" />
+      <script src="{% static 'lib/xterm.js' %}"></script>
     </head>
     <body>
       <div id="terminal"></div>
