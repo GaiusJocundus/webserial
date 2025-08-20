@@ -9,7 +9,7 @@ class Com():
         self.con = serial.Serial(port, baud, timeout=limit)
         self.sout = io.TextIOWrapper(io.BufferedWriter(self.con),encoding="ascii")
         self.sin = io.TextIOWrapper(io.BufferedReader(self.con),encoding="ascii")
-        
+
     def write(self, text, newline = True):
         for ltr in f'{text}':
             self.sout.write(f'{ltr}')
