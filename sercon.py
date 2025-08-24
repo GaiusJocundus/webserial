@@ -10,15 +10,29 @@ from lib.com import Com
 
 con0 = Com()
 
+
+def reader():
+    return con0.read()
+
+
+def writer(msg):
+    con0.write(msg)
+
+
+async def readWrapper(websocket):
+    loop = asyncio.get_running_loop()
+    for line in await loop.run_in_executor(None, reader):
+        await websocket.send(bytes(line.encode()))
+
+
+async def writeWrapper(websocket):
+    loop = asyncio.get_running_loop()
+    async for msg in websocket:
+        await loop.run_in_executor(None, writer, msg)
+
+
 async def serIo(websocket):
-    async for message in websocket:
-        con0.write(message, False)
-        sout = con0.read()
-        for line in sout:
-            for ltr in line:
-                if ((ltr == '\n') or (ltr == '>') or (ltr == '*')):
-                    await websocket.send('\r')
-            await websocket.send(line)
+    await asyncio.gather(readWrapper(websocket), writeWrapper(websocket))
 
 
 async def main():
