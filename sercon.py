@@ -16,23 +16,23 @@ def reader():
 
 
 def writer(msg):
-    con0.write(msg)
+    con0.write(msg, True)
 
 
 async def readWrapper(websocket):
-    loop = asyncio.get_running_loop()
-    for line in await loop.run_in_executor(None, reader):
-        await websocket.send(bytes(line.encode()))
+    while True:
+        for line in reader():
+            await websocket.send(bytes(line.encode()))
 
 
 async def writeWrapper(websocket):
-    loop = asyncio.get_running_loop()
     async for msg in websocket:
-        await loop.run_in_executor(None, writer, msg)
+        writer(msg)
 
 
 async def serIo(websocket):
-    await asyncio.gather(readWrapper(websocket), writeWrapper(websocket))
+    readTask = asyncio.create_task(await readWrapper(websocket))
+    await readTask()
 
 
 async def main():
